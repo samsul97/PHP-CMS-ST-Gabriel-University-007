@@ -289,13 +289,10 @@ class SiteController extends Controller
                 ->setSubject($subject)
                 ->setTextBody($message)
                 ->send();
-
-                var_dump($mailer);
-                die;
                 
             if ($mailer) {
                 // Yii::$app->session->setFlash('success', 'Message Sent!');
-                Yii::$app->getSession()->setFlash('about_us_created', [
+                Yii::$app->getSession()->setFlash('success', [
                     'type'     => 'success',
                     'duration' => 5000,
                     'title'    => 'System Information',
