@@ -272,16 +272,12 @@ class SiteController extends Controller
         $model = new Enquiry();
         
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            // var_dump($model->name);
-            // die;
             $name = $model->name;
             $subject = $model->subject;
             $email = $model->email;
             $message = $model->message;
             $to = 'forwarder@stgabrielpreuniversity.com';
             $model->save(false);
-
-            // $headers = 'From: ' . $email;
 
             $mailer = Yii::$app->mailer->compose()
                 ->setFrom($email)
@@ -292,18 +288,18 @@ class SiteController extends Controller
                 
             if ($mailer) {
                 // Yii::$app->session->setFlash('success', 'Message Sent!');
-                Yii::$app->getSession()->setFlash('success', [
+                Yii::$app->getSession()->setFlash('send_email_success', [
                     'type'     => 'success',
                     'duration' => 5000,
                     'title'    => 'System Information',
-                    'message'  => 'Data Updated!',
-                ]
-            );
+                    'message'  => 'Application sent!',
+                ]);
+
             } else {
                 Yii::$app->session->setFlash('error', 'Failed to send message!');
             }
+            return $this->redirect(['index']);
 
-            return $this->redirect(['index']); // Redirect to the same page after form submission
         }
     }
 
