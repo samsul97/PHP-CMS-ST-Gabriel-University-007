@@ -66,7 +66,7 @@ AppAsset::register($this);
             <div class="col-sm-6 col-lg-3 footer-widget text-right header-info" align="right">
             </br></br>
                 <div style="font-family: Kaushan Script" class="about-widget text-left">
-                        <img src="<?= Url::to('@web/img/athe_new.jpg') ?>" alt="AWARDS ST GABRIEL PRE UNIVERSITY"></a></br>
+                        <img src="<?= Url::to('@web/img/athe_new.png') ?>" alt="AWARDS ST GABRIEL PRE UNIVERSITY"></a></br>
                 </div>
             </div>		 
         </div>
@@ -344,7 +344,7 @@ AppAsset::register($this);
                 <img width="250px" src="<?= Url::base().'/backend' . $imageContact ?>" alt="LOGO ST GABRIEL PRE UNIVERSITY">
             </div>
             <div  class="about-widget text-left">
-                <img width="250px" src="<?= Url::to('@web/img/athe_new.jpg') ?>" alt="AWARDS ST GABRIEL PRE UNIVERSITY" style="margin-top:-5%">
+                <img width="250px" src="<?= Url::to('@web/img/athe_new.png') ?>" alt="AWARDS ST GABRIEL PRE UNIVERSITY" style="margin-top:-5%">
             </div>
         </div>
         <!-- Logo end -->
