@@ -9,56 +9,21 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\helpers\Html;
 
-$this->title = 'Article - ST Gabriel Pre University';
+$this->title = $seoData->title;
 $this->params['breadcrumbs'][] = ['label' => 'Article', 'url' => ['/article/articles']];
 $this->params['breadcrumbs'][] = $this->title;
 
-// seo page
-$this->registerMetaTag([
-    'name' => 'keywords',
-    'content' => '
-        a level,
-        athe,
-        college,
-        college in indonesia,
-        college jakarta,
-        fast track,
-        ib diploma,
-        indonesia college, 
-        international college jakarta,
-        international school di jakarta,
-        international university indonesia,
-        international university jakarta,
-        jakarta international college,
-        kuliah cepat ijazah international,
-        kuliah di luar negeri,
-        o level,
-        ofqual accreditation,
-        pathway,
-        preuniversity,
-        preuniversity indonesia,
-        preuniversity jakarta,
-        school of business,
-        school of business jakarta,
-        sekolah fast track,
-        sekolah fast track program,
-        sekolah pathway luar negeri,
-        study abroad,
-        study business management,
-        study diploma fast track,
-        study in australia,
-        study in singapore,
-        study in uk,
-        distance learning',
-], 'keywords');
+// seo page keywords
+$this->registerMetaTag(['name' => 'keywords', 'content' => $seoData->keywords], 'keywords');
 
 // seo page description
-$this->registerMetaTag([
-    'name' => 'description',
-    'content' => 'Keep following our news to get the latest information.',
-], 'description');
+$this->registerMetaTag(['name' => 'description', 'content' => $seoData->description], 'description');
 
-// \yii\web\YiiAsset::register($this);
+// seo page canonical
+$this->registerLinkTag(['rel' => 'canonical', 'href' => $seoData->canonical]);
+
+// seo page robots
+$this->registerMetaTag(['name' => 'robots', 'content' => $seoData->robots], 'robots');
 
 $select_type = ArrayHelper::map(ArticleCategory::find()->asArray()->all(), 'id', function($model, $defaultValue) {
     return $model['name'];
@@ -66,36 +31,35 @@ $select_type = ArrayHelper::map(ArticleCategory::find()->asArray()->all(), 'id',
 );
 ?>
 <div class="container">
-    <!-- <div class="row"> -->
-        <?php $form = ActiveForm::begin([
-            'id' => 'search-form',
-            'method' => 'get',
-            'action' => ['articles'], // Replace 'search' with your search action
-        ]); ?>
-        
-        <div class="col-md-3">
-            <?= $form->field($searchModel, 'searchQuery')->textInput(['maxlength' => true]) ?>
+    <?php $form = ActiveForm::begin([
+        'id' => 'search-form',
+        'method' => 'get',
+        'action' => ['articles'], // Replace 'search' with your search action
+    ]); ?>
+    
+    <div class="col-md-3">
+        <?= $form->field($searchModel, 'searchQuery')->textInput(['maxlength' => true]) ?>
+    </div>
+
+    <div class="col-md-3">
+        <?= $form->field($searchModel, 'article_category_id')->widget(Select2::classname(),[
+                'data' => $select_type,
+                'options' => [
+                    'placeholder' => 'Select Category',
+                    'value' => $searchModel->article_category_id,
+                ],
+                'pluginOptions' => [
+                    'allowClear' => false
+                ],
+            ]);
+        ?>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
         </div>
-        <div class="col-md-3">
-            <?= $form->field($searchModel, 'article_category_id')->widget(Select2::classname(),[
-                    'data' => $select_type,
-                    'options' => [
-                        'placeholder' => 'Select Category',
-                        'value' => $searchModel->article_category_id,
-                    ],
-                    'pluginOptions' => [
-                        'allowClear' => false
-                    ],
-                ]);
-            ?>
-        </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-            </div>
-        </div>
-        <?php ActiveForm::end(); ?>
-    <!-- </div> -->
+    </div>
+    <?php ActiveForm::end(); ?>
 </div>
 
 <div class="container">
@@ -153,7 +117,6 @@ $select_type = ArrayHelper::map(ArticleCategory::find()->asArray()->all(), 'id',
                                 <h5><?= Html::a($value->title, ['/article/article-one', 'id' => $value->id], ['style' => 'color:black', 'target'=>'_blank']) ?></h5>
                                 <br>
                                 <p style="text-align:justify;padding-right:2%;color:black"><?= $string ?></p>
-                                <!-- <span>Article</span> -->
                             </div>
                         </div>
                     </div>
@@ -197,7 +160,6 @@ $select_type = ArrayHelper::map(ArticleCategory::find()->asArray()->all(), 'id',
                                 <h5><?= Html::a($value->title, ['/article/article-one', 'id' => $value->id], ['style' => 'color:black', 'target'=>'_blank']) ?></h5>
                                 <br>
                                 <p style="text-align:justify;padding-right:2%;color:black"><?= $string ?></p>
-                                <!-- <span>Article</span> -->
                             </div>
                         </div>
                     </div>
@@ -213,3 +175,33 @@ $select_type = ArrayHelper::map(ArticleCategory::find()->asArray()->all(), 'id',
         </center>
     </div>
 </div>
+
+<?php
+$js = <<< JS
+{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "<?= $name ?>",
+    "description": "<?= $description ?>",
+    "url": "<?= $url ?>",
+    "image": "<?= $image ?>",
+    "datePublished": "<?= $datePublished ?>",
+    "dateModified": "<?= $dateModified ?>",
+    "author": {
+        "@type": "Person",
+        "name": "<?= $authorName ?>"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "<?= $publisherName ?>",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "<?= $publisherLogo ?>"
+        }
+    },
+    "keywords": "<?= $keywords ?>",
+    "mainEntityOfPage": "<?= $mainEntityOfPage ?>"
+}
+JS;
+
+$this->registerJs($js);

@@ -5,25 +5,18 @@ namespace frontend\controllers;
 use Yii;
 use backend\models\Gallery;
 use backend\models\GalleryCategory;
-use backend\models\GallerySearch;
-use backend\models\Slider;
+use backend\models\Seo;
 use common\components\YoutubeClient;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-use Google_Client;
-use Google_Service_YouTube;
-
 /**
  * GalleryController implements the CRUD actions for Gallery model.
  */
 class GalleryController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
     public function behaviors()
     {
         return [
@@ -36,93 +29,6 @@ class GalleryController extends Controller
         ];
     }
 
-    /**
-     * Lists all Gallery models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new GallerySearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Displays a single Gallery model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new Gallery model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Gallery();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Updates an existing Gallery model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Deletes an existing Gallery model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Gallery model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Gallery the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = Gallery::findOne($id)) !== null) {
@@ -139,56 +45,126 @@ class GalleryController extends Controller
             'pagination' => [
                 'pageSize' => 9
             ],
-            // 'sort' => [
-            //     'defaultOrder' => [
-            //         'timestamp' => SORT_DESC,
-            //         'name' => SORT_ASC, 
-            //     ]
-            // ],
         ]);
 
         $youtubeClient = new YoutubeClient();
         $youtubeVideo = $youtubeClient->getVideos();
 
-        // echo "<pre>";
-        // var_dump($youtubeVideo);
-        // die;
+        $seoData = Seo::findByControllerAndView('gallery', 'gallery-categories');
+
+        $schemaProperties = isset($seoData->schema_properties) ? json_decode($seoData->schema_properties) : null;
+
+        $name = isset($schemaProperties) && isset($schemaProperties->name) ? $schemaProperties->name : null;
+        $description = isset($schemaProperties) && isset($schemaProperties->description) ? $schemaProperties->description : null;
+        $url = isset($schemaProperties) && isset($schemaProperties->url) ? $schemaProperties->url : null;
+        $image = isset($schemaProperties) && isset($schemaProperties->image) ? $schemaProperties->image : null;
+        $datePublished = isset($schemaProperties) && isset($schemaProperties->datePublished) ? $schemaProperties->datePublished : null;
+        $dateModified = isset($schemaProperties) && isset($schemaProperties->dateModified) ? $schemaProperties->dateModified : null;
+        $authorName = isset($schemaProperties) && isset($schemaProperties->author->name) ? $schemaProperties->author->name : null;
+        $publisherName = isset($schemaProperties) && isset($schemaProperties->publisher->name) ? $schemaProperties->publisher->name : null;
+        $publisherLogo = isset($schemaProperties) && isset($schemaProperties->publisher->logo->url) ? $schemaProperties->publisher->logo->url : null;
+        $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
+        $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
 
         return $this->render('gallery_categories', [
             'model' => $model,
             'youtubeVideo' => $youtubeVideo,
+            'seoData' => $seoData,
+            'name' => $name,
+            'description' => $description,
+            'url' => $url,
+            'image' => $image,
+            'datePublished' => $datePublished,
+            'dateModified' => $dateModified,
+            'authorName' => $authorName,
+            'publisherName' => $publisherName,
+            'publisherLogo' => $publisherLogo,
+            'keywords' => $keywords,
+            'mainEntityOfPage' => $mainEntityOfPage,
         ]);
     }
 
     public function actionGallery($id)
     {
-        
-        
         $galleryCategory = GalleryCategory::findOne($id);
 
         $gallery = Gallery::find()
                     ->where(['gallery_category_id' => $galleryCategory->id])
                     ->all();
 
+        $seoData = Seo::findByControllerAndView('gallery', 'gallery');
+
+        $schemaProperties = isset($seoData->schema_properties) ? json_decode($seoData->schema_properties) : null;
+
+        $name = isset($schemaProperties) && isset($schemaProperties->name) ? $schemaProperties->name : null;
+        $description = isset($schemaProperties) && isset($schemaProperties->description) ? $schemaProperties->description : null;
+        $url = isset($schemaProperties) && isset($schemaProperties->url) ? $schemaProperties->url : null;
+        $image = isset($schemaProperties) && isset($schemaProperties->image) ? $schemaProperties->image : null;
+        $datePublished = isset($schemaProperties) && isset($schemaProperties->datePublished) ? $schemaProperties->datePublished : null;
+        $dateModified = isset($schemaProperties) && isset($schemaProperties->dateModified) ? $schemaProperties->dateModified : null;
+        $authorName = isset($schemaProperties) && isset($schemaProperties->author->name) ? $schemaProperties->author->name : null;
+        $publisherName = isset($schemaProperties) && isset($schemaProperties->publisher->name) ? $schemaProperties->publisher->name : null;
+        $publisherLogo = isset($schemaProperties) && isset($schemaProperties->publisher->logo->url) ? $schemaProperties->publisher->logo->url : null;
+        $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
+        $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
+
         return $this->render('gallery', [
             'gallery' => $gallery,
-            'galleryCategory' => $galleryCategory
+            'galleryCategory' => $galleryCategory,
+            'seoData' => $seoData,
+            'name' => $name,
+            'description' => $description,
+            'url' => $url,
+            'image' => $image,
+            'datePublished' => $datePublished,
+            'dateModified' => $dateModified,
+            'authorName' => $authorName,
+            'publisherName' => $publisherName,
+            'publisherLogo' => $publisherLogo,
+            'keywords' => $keywords,
+            'mainEntityOfPage' => $mainEntityOfPage,
         ]);
     }
 
     public function actionGalleryDetail($id)
     {
-
         $galleryCategory = GalleryCategory::findOne($id);
 
         $gallery = Gallery::find()
-                    ->where(['gallery_category_id' => $galleryCategory->id])
-                    ->all();
+                ->where(['gallery_category_id' => $galleryCategory->id])
+                ->all();
 
+        $seoData = Seo::findByControllerAndView('gallery', 'gallery-detail');
+
+        $schemaProperties = isset($seoData->schema_properties) ? json_decode($seoData->schema_properties) : null;
+
+        $name = isset($schemaProperties) && isset($schemaProperties->name) ? $schemaProperties->name : null;
+        $description = isset($schemaProperties) && isset($schemaProperties->description) ? $schemaProperties->description : null;
+        $url = isset($schemaProperties) && isset($schemaProperties->url) ? $schemaProperties->url : null;
+        $image = isset($schemaProperties) && isset($schemaProperties->image) ? $schemaProperties->image : null;
+        $datePublished = isset($schemaProperties) && isset($schemaProperties->datePublished) ? $schemaProperties->datePublished : null;
+        $dateModified = isset($schemaProperties) && isset($schemaProperties->dateModified) ? $schemaProperties->dateModified : null;
+        $authorName = isset($schemaProperties) && isset($schemaProperties->author->name) ? $schemaProperties->author->name : null;
+        $publisherName = isset($schemaProperties) && isset($schemaProperties->publisher->name) ? $schemaProperties->publisher->name : null;
+        $publisherLogo = isset($schemaProperties) && isset($schemaProperties->publisher->logo->url) ? $schemaProperties->publisher->logo->url : null;
+        $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
+        $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
+        
         return $this->renderAjax('gallery_detail', [
             'gallery' => $gallery,
             'galleryCategory' => $galleryCategory,
+            'seoData' => $seoData,
+            'name' => $name,
+            'description' => $description,
+            'url' => $url,
+            'image' => $image,
+            'datePublished' => $datePublished,
+            'dateModified' => $dateModified,
+            'authorName' => $authorName,
+            'publisherName' => $publisherName,
+            'publisherLogo' => $publisherLogo,
+            'keywords' => $keywords,
+            'mainEntityOfPage' => $mainEntityOfPage,
         ]);
     }
-
 }

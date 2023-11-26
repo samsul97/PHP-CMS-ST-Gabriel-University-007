@@ -1,53 +1,20 @@
 <?php
 
-$this->title = 'Management - ST Gabriel Pre University';
+$this->title = $seoData->title;
 $this->params['breadcrumbs'][] = ['label' => 'Management', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
-// seo page
-$this->registerMetaTag([
-    'name' => 'keywords',
-    'content' => '
-        a level,
-        athe,
-        college,
-        college in indonesia,
-        college jakarta,
-        fast track,
-        ib diploma,
-        indonesia college, 
-        international college jakarta,
-        international school di jakarta,
-        international university indonesia,
-        international university jakarta,
-        jakarta international college,
-        kuliah cepat ijazah international,
-        kuliah di luar negeri,
-        o level,
-        ofqual accreditation,
-        pathway,
-        preuniversity,
-        preuniversity indonesia,
-        preuniversity jakarta,
-        school of business,
-        school of business jakarta,
-        sekolah fast track,
-        sekolah fast track program,
-        sekolah pathway luar negeri,
-        study abroad,
-        study business management,
-        study diploma fast track,
-        study in australia,
-        study in singapore,
-        study in uk,
-        distance learning',
-], 'keywords');
+// seo page keywords
+$this->registerMetaTag(['name' => 'keywords', 'content' => $seoData->keywords], 'keywords');
 
 // seo page description
-$this->registerMetaTag([
-    'name' => 'description',
-    'content' => 'This is a management page.',
-], 'description');
+$this->registerMetaTag(['name' => 'description', 'content' => $seoData->description], 'description');
+
+// seo page canonical
+$this->registerLinkTag(['rel' => 'canonical', 'href' => $seoData->canonical]);
+
+// seo page robots
+$this->registerMetaTag(['name' => 'robots', 'content' => $seoData->robots], 'robots');
 
 ?>
 
@@ -58,3 +25,33 @@ $this->registerMetaTag([
     </div>
 </section>
 <!-- Management section end-->
+
+<?php
+$js = <<< JS
+{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "<?= $name ?>",
+    "description": "<?= $description ?>",
+    "url": "<?= $url ?>",
+    "image": "<?= $image ?>",
+    "datePublished": "<?= $datePublished ?>",
+    "dateModified": "<?= $dateModified ?>",
+    "author": {
+        "@type": "Person",
+        "name": "<?= $authorName ?>"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "<?= $publisherName ?>",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "<?= $publisherLogo ?>"
+        }
+    },
+    "keywords": "<?= $keywords ?>",
+    "mainEntityOfPage": "<?= $mainEntityOfPage ?>"
+}
+JS;
+
+$this->registerJs($js);

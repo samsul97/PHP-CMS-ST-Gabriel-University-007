@@ -5,7 +5,7 @@ namespace frontend\controllers;
 use Yii;
 use backend\models\Student;
 use backend\models\StudentCategory;
-use backend\models\StudentSearch;
+use backend\models\Seo;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -15,9 +15,6 @@ use yii\filters\VerbFilter;
  */
 class StudentController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
     public function behaviors()
     {
         return [
@@ -30,93 +27,6 @@ class StudentController extends Controller
         ];
     }
 
-    /**
-     * Lists all Student models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new StudentSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Displays a single Student model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new Student model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Student();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Updates an existing Student model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Deletes an existing Student model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Student model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Student the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = Student::findOne($id)) !== null) {
@@ -130,8 +40,36 @@ class StudentController extends Controller
     {
         $model = Student::findOne(['id' => 1, 'student_category_id' => StudentCategory::WHY]);
 
+        $seoData = Seo::findByControllerAndView('student', 'why-stgabriel');
+
+        $schemaProperties = isset($seoData->schema_properties) ? json_decode($seoData->schema_properties) : null;
+
+        $name = isset($schemaProperties) && isset($schemaProperties->name) ? $schemaProperties->name : null;
+        $description = isset($schemaProperties) && isset($schemaProperties->description) ? $schemaProperties->description : null;
+        $url = isset($schemaProperties) && isset($schemaProperties->url) ? $schemaProperties->url : null;
+        $image = isset($schemaProperties) && isset($schemaProperties->image) ? $schemaProperties->image : null;
+        $datePublished = isset($schemaProperties) && isset($schemaProperties->datePublished) ? $schemaProperties->datePublished : null;
+        $dateModified = isset($schemaProperties) && isset($schemaProperties->dateModified) ? $schemaProperties->dateModified : null;
+        $authorName = isset($schemaProperties) && isset($schemaProperties->author->name) ? $schemaProperties->author->name : null;
+        $publisherName = isset($schemaProperties) && isset($schemaProperties->publisher->name) ? $schemaProperties->publisher->name : null;
+        $publisherLogo = isset($schemaProperties) && isset($schemaProperties->publisher->logo->url) ? $schemaProperties->publisher->logo->url : null;
+        $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
+        $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
+
         return $this->render('why', [
-            'model' => $model
+            'model' => $model,
+            'seoData' => $seoData,
+            'name' => $name,
+            'description' => $description,
+            'url' => $url,
+            'image' => $image,
+            'datePublished' => $datePublished,
+            'dateModified' => $dateModified,
+            'authorName' => $authorName,
+            'publisherName' => $publisherName,
+            'publisherLogo' => $publisherLogo,
+            'keywords' => $keywords,
+            'mainEntityOfPage' => $mainEntityOfPage,
         ]);
     }
 
@@ -139,8 +77,37 @@ class StudentController extends Controller
     {
         $model = Student::findOne(['id' => 2, 'student_category_id' => StudentCategory::SCS]);
 
+        $seoData = Seo::findByControllerAndView('student', 'scs');
+
+        $schemaProperties = isset($seoData->schema_properties) ? json_decode($seoData->schema_properties) : null;
+
+        $name = isset($schemaProperties) && isset($schemaProperties->name) ? $schemaProperties->name : null;
+        $description = isset($schemaProperties) && isset($schemaProperties->description) ? $schemaProperties->description : null;
+        $url = isset($schemaProperties) && isset($schemaProperties->url) ? $schemaProperties->url : null;
+        $image = isset($schemaProperties) && isset($schemaProperties->image) ? $schemaProperties->image : null;
+        $datePublished = isset($schemaProperties) && isset($schemaProperties->datePublished) ? $schemaProperties->datePublished : null;
+        $dateModified = isset($schemaProperties) && isset($schemaProperties->dateModified) ? $schemaProperties->dateModified : null;
+        $authorName = isset($schemaProperties) && isset($schemaProperties->author->name) ? $schemaProperties->author->name : null;
+        $publisherName = isset($schemaProperties) && isset($schemaProperties->publisher->name) ? $schemaProperties->publisher->name : null;
+        $publisherLogo = isset($schemaProperties) && isset($schemaProperties->publisher->logo->url) ? $schemaProperties->publisher->logo->url : null;
+        $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
+        $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
+
         return $this->render('scs', [
-            'model' => $model
+            'model' => $model,
+            'seoData' => $seoData,
+            'name' => $name,
+            'description' => $description,
+            'url' => $url,
+            'image' => $image,
+            'datePublished' => $datePublished,
+            'dateModified' => $dateModified,
+            'authorName' => $authorName,
+            'publisherName' => $publisherName,
+            'publisherLogo' => $publisherLogo,
+            'keywords' => $keywords,
+            'mainEntityOfPage' => $mainEntityOfPage,
+
         ]);
     }
     
@@ -148,8 +115,36 @@ class StudentController extends Controller
     {
         $model = Student::findOne(['id' => 3, 'student_category_id' => StudentCategory::ALUMNI]);
 
+        $seoData = Seo::findByControllerAndView('student', 'alumni');
+
+        $schemaProperties = isset($seoData->schema_properties) ? json_decode($seoData->schema_properties) : null;
+
+        $name = isset($schemaProperties) && isset($schemaProperties->name) ? $schemaProperties->name : null;
+        $description = isset($schemaProperties) && isset($schemaProperties->description) ? $schemaProperties->description : null;
+        $url = isset($schemaProperties) && isset($schemaProperties->url) ? $schemaProperties->url : null;
+        $image = isset($schemaProperties) && isset($schemaProperties->image) ? $schemaProperties->image : null;
+        $datePublished = isset($schemaProperties) && isset($schemaProperties->datePublished) ? $schemaProperties->datePublished : null;
+        $dateModified = isset($schemaProperties) && isset($schemaProperties->dateModified) ? $schemaProperties->dateModified : null;
+        $authorName = isset($schemaProperties) && isset($schemaProperties->author->name) ? $schemaProperties->author->name : null;
+        $publisherName = isset($schemaProperties) && isset($schemaProperties->publisher->name) ? $schemaProperties->publisher->name : null;
+        $publisherLogo = isset($schemaProperties) && isset($schemaProperties->publisher->logo->url) ? $schemaProperties->publisher->logo->url : null;
+        $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
+        $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
+
         return $this->render('alumni', [
-            'model' => $model
+            'model' => $model,
+            'seoData' => $seoData,
+            'name' => $name,
+            'description' => $description,
+            'url' => $url,
+            'image' => $image,
+            'datePublished' => $datePublished,
+            'dateModified' => $dateModified,
+            'authorName' => $authorName,
+            'publisherName' => $publisherName,
+            'publisherLogo' => $publisherLogo,
+            'keywords' => $keywords,
+            'mainEntityOfPage' => $mainEntityOfPage,
         ]);
     }
     
@@ -157,16 +152,73 @@ class StudentController extends Controller
     {
         $model = Student::findOne(['id' => 4, 'student_category_id' => StudentCategory::PASTORAL]);
 
+        $seoData = Seo::findByControllerAndView('student', 'pastoral-conseling');
+
+        $schemaProperties = isset($seoData->schema_properties) ? json_decode($seoData->schema_properties) : null;
+
+        $name = isset($schemaProperties) && isset($schemaProperties->name) ? $schemaProperties->name : null;
+        $description = isset($schemaProperties) && isset($schemaProperties->description) ? $schemaProperties->description : null;
+        $url = isset($schemaProperties) && isset($schemaProperties->url) ? $schemaProperties->url : null;
+        $image = isset($schemaProperties) && isset($schemaProperties->image) ? $schemaProperties->image : null;
+        $datePublished = isset($schemaProperties) && isset($schemaProperties->datePublished) ? $schemaProperties->datePublished : null;
+        $dateModified = isset($schemaProperties) && isset($schemaProperties->dateModified) ? $schemaProperties->dateModified : null;
+        $authorName = isset($schemaProperties) && isset($schemaProperties->author->name) ? $schemaProperties->author->name : null;
+        $publisherName = isset($schemaProperties) && isset($schemaProperties->publisher->name) ? $schemaProperties->publisher->name : null;
+        $publisherLogo = isset($schemaProperties) && isset($schemaProperties->publisher->logo->url) ? $schemaProperties->publisher->logo->url : null;
+        $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
+        $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
+
         return $this->render('pastoral', [
-            'model' => $model
+            'model' => $model,
+            'seoData' => $seoData,
+            'name' => $name,
+            'description' => $description,
+            'url' => $url,
+            'image' => $image,
+            'datePublished' => $datePublished,
+            'dateModified' => $dateModified,
+            'authorName' => $authorName,
+            'publisherName' => $publisherName,
+            'publisherLogo' => $publisherLogo,
+            'keywords' => $keywords,
+            'mainEntityOfPage' => $mainEntityOfPage,
         ]);
     }
 
     public function actionHandbook()
     {
         $model = Student::findOne(['id' => 5, 'student_category_id' => StudentCategory::HANDBOOK]);
+
+        $seoData = Seo::findByControllerAndView('student', 'handbook');
+
+        $schemaProperties = isset($seoData->schema_properties) ? json_decode($seoData->schema_properties) : null;
+
+        $name = isset($schemaProperties) && isset($schemaProperties->name) ? $schemaProperties->name : null;
+        $description = isset($schemaProperties) && isset($schemaProperties->description) ? $schemaProperties->description : null;
+        $url = isset($schemaProperties) && isset($schemaProperties->url) ? $schemaProperties->url : null;
+        $image = isset($schemaProperties) && isset($schemaProperties->image) ? $schemaProperties->image : null;
+        $datePublished = isset($schemaProperties) && isset($schemaProperties->datePublished) ? $schemaProperties->datePublished : null;
+        $dateModified = isset($schemaProperties) && isset($schemaProperties->dateModified) ? $schemaProperties->dateModified : null;
+        $authorName = isset($schemaProperties) && isset($schemaProperties->author->name) ? $schemaProperties->author->name : null;
+        $publisherName = isset($schemaProperties) && isset($schemaProperties->publisher->name) ? $schemaProperties->publisher->name : null;
+        $publisherLogo = isset($schemaProperties) && isset($schemaProperties->publisher->logo->url) ? $schemaProperties->publisher->logo->url : null;
+        $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
+        $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
+
         return $this->render('handbook', [
-            'model' => $model
+            'model' => $model,
+            'seoData' => $seoData,
+            'name' => $name,
+            'description' => $description,
+            'url' => $url,
+            'image' => $image,
+            'datePublished' => $datePublished,
+            'dateModified' => $dateModified,
+            'authorName' => $authorName,
+            'publisherName' => $publisherName,
+            'publisherLogo' => $publisherLogo,
+            'keywords' => $keywords,
+            'mainEntityOfPage' => $mainEntityOfPage,
         ]);
     }
 }

@@ -4,10 +4,9 @@ namespace frontend\controllers;
 
 use backend\models\AboutUsCategory;
 use backend\models\Contacts;
-use backend\models\Footer;
 use Yii;
-use frontend\models\AboutUs;
-use frontend\models\AboutUsSearch;
+use backend\models\AboutUs;
+use backend\models\Seo;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -17,10 +16,6 @@ use yii\filters\VerbFilter;
  */
 class AboutUsController extends Controller
 {
-    // public $layout = 'main';
-    /**
-     * {@inheritdoc}
-     */
     public function behaviors()
     {
         return [
@@ -33,93 +28,6 @@ class AboutUsController extends Controller
         ];
     }
 
-    /**
-     * Lists all AboutUs models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new AboutUsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Displays a single AboutUs model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new AboutUs model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new AboutUs();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Updates an existing AboutUs model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Deletes an existing AboutUs model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the AboutUs model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return AboutUs the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = AboutUs::findOne($id)) !== null) {
@@ -129,81 +37,225 @@ class AboutUsController extends Controller
         throw new NotFoundHttpException(Yii::t('frontend', 'The requested page does not exist.'));
     }
 
-    public function actionProfile(Type $var = null)
+    public function actionProfile()
     {
-        
         $model = AboutUs::findOne(['id' => 1, 'about_category_id' => AboutUsCategory::PROFILE]); // profile
 
+        $seoData = Seo::findByControllerAndView('about-us', 'profile');
+
+        $schemaProperties = isset($seoData->schema_properties) ? json_decode($seoData->schema_properties) : null;
+
+        $name = isset($schemaProperties) && isset($schemaProperties->name) ? $schemaProperties->name : null;
+        $description = isset($schemaProperties) && isset($schemaProperties->description) ? $schemaProperties->description : null;
+        $url = isset($schemaProperties) && isset($schemaProperties->url) ? $schemaProperties->url : null;
+        $image = isset($schemaProperties) && isset($schemaProperties->image) ? $schemaProperties->image : null;
+        $datePublished = isset($schemaProperties) && isset($schemaProperties->datePublished) ? $schemaProperties->datePublished : null;
+        $dateModified = isset($schemaProperties) && isset($schemaProperties->dateModified) ? $schemaProperties->dateModified : null;
+        $authorName = isset($schemaProperties) && isset($schemaProperties->author->name) ? $schemaProperties->author->name : null;
+        $publisherName = isset($schemaProperties) && isset($schemaProperties->publisher->name) ? $schemaProperties->publisher->name : null;
+        $publisherLogo = isset($schemaProperties) && isset($schemaProperties->publisher->logo->url) ? $schemaProperties->publisher->logo->url : null;
+        $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
+        $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
+
         return $this->render('profile', [
-            'model' => $model
+            'model' => $model,
+            'seoData' => $seoData,
+            'name' => $name,
+            'description' => $description,
+            'url' => $url,
+            'image' => $image,
+            'datePublished' => $datePublished,
+            'dateModified' => $dateModified,
+            'authorName' => $authorName,
+            'publisherName' => $publisherName,
+            'publisherLogo' => $publisherLogo,
+            'keywords' => $keywords,
+            'mainEntityOfPage' => $mainEntityOfPage,
         ]);
     }
 
-    public function actionManagement(Type $var = null)
+    public function actionManagement()
     {
         $model = AboutUs::findOne(['id' => 2, 'about_category_id' => AboutUsCategory::MANAGEMENT]); // management
 
+        $seoData = Seo::findByControllerAndView('about-us', 'management');
+
+        $schemaProperties = isset($seoData->schema_properties) ? json_decode($seoData->schema_properties) : null;
+
+        $name = isset($schemaProperties) && isset($schemaProperties->name) ? $schemaProperties->name : null;
+        $description = isset($schemaProperties) && isset($schemaProperties->description) ? $schemaProperties->description : null;
+        $url = isset($schemaProperties) && isset($schemaProperties->url) ? $schemaProperties->url : null;
+        $image = isset($schemaProperties) && isset($schemaProperties->image) ? $schemaProperties->image : null;
+        $datePublished = isset($schemaProperties) && isset($schemaProperties->datePublished) ? $schemaProperties->datePublished : null;
+        $dateModified = isset($schemaProperties) && isset($schemaProperties->dateModified) ? $schemaProperties->dateModified : null;
+        $authorName = isset($schemaProperties) && isset($schemaProperties->author->name) ? $schemaProperties->author->name : null;
+        $publisherName = isset($schemaProperties) && isset($schemaProperties->publisher->name) ? $schemaProperties->publisher->name : null;
+        $publisherLogo = isset($schemaProperties) && isset($schemaProperties->publisher->logo->url) ? $schemaProperties->publisher->logo->url : null;
+        $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
+        $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
+
         return $this->render('management', [
-            'model' => $model
+            'model' => $model,
+            'seoData' => $seoData,
+            'name' => $name,
+            'description' => $description,
+            'url' => $url,
+            'image' => $image,
+            'datePublished' => $datePublished,
+            'dateModified' => $dateModified,
+            'authorName' => $authorName,
+            'publisherName' => $publisherName,
+            'publisherLogo' => $publisherLogo,
+            'keywords' => $keywords,
+            'mainEntityOfPage' => $mainEntityOfPage,
         ]);
     }
 
-    public function actionLecturer(Type $var = null)
+    public function actionLecturer()
     {
         $model = AboutUs::findOne(['id' => 3, 'about_category_id' => AboutUsCategory::LECTURER]); // profile
 
+        $seoData = Seo::findByControllerAndView('about-us', 'lecturer');
+
+        $schemaProperties = isset($seoData->schema_properties) ? json_decode($seoData->schema_properties) : null;
+
+        $name = isset($schemaProperties) && isset($schemaProperties->name) ? $schemaProperties->name : null;
+        $description = isset($schemaProperties) && isset($schemaProperties->description) ? $schemaProperties->description : null;
+        $url = isset($schemaProperties) && isset($schemaProperties->url) ? $schemaProperties->url : null;
+        $image = isset($schemaProperties) && isset($schemaProperties->image) ? $schemaProperties->image : null;
+        $datePublished = isset($schemaProperties) && isset($schemaProperties->datePublished) ? $schemaProperties->datePublished : null;
+        $dateModified = isset($schemaProperties) && isset($schemaProperties->dateModified) ? $schemaProperties->dateModified : null;
+        $authorName = isset($schemaProperties) && isset($schemaProperties->author->name) ? $schemaProperties->author->name : null;
+        $publisherName = isset($schemaProperties) && isset($schemaProperties->publisher->name) ? $schemaProperties->publisher->name : null;
+        $publisherLogo = isset($schemaProperties) && isset($schemaProperties->publisher->logo->url) ? $schemaProperties->publisher->logo->url : null;
+        $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
+        $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
+
         return $this->render('lecturer', [
-            'model' => $model
+            'model' => $model,
+            'seoData' => $seoData,
+            'name' => $name,
+            'description' => $description,
+            'url' => $url,
+            'image' => $image,
+            'datePublished' => $datePublished,
+            'dateModified' => $dateModified,
+            'authorName' => $authorName,
+            'publisherName' => $publisherName,
+            'publisherLogo' => $publisherLogo,
+            'keywords' => $keywords,
+            'mainEntityOfPage' => $mainEntityOfPage,
         ]);
     }
     
-    public function actionCeomessage(Type $var = null)
+    public function actionCeomessage()
     {
         $model = AboutUs::findOne(['id' => 4, 'about_category_id' => AboutUsCategory::CEO_MESSAGES]); // profile
 
+        $seoData = Seo::findByControllerAndView('about-us', 'ceomessage');
+
+        $schemaProperties = isset($seoData->schema_properties) ? json_decode($seoData->schema_properties) : null;
+
+        $name = isset($schemaProperties) && isset($schemaProperties->name) ? $schemaProperties->name : null;
+        $description = isset($schemaProperties) && isset($schemaProperties->description) ? $schemaProperties->description : null;
+        $url = isset($schemaProperties) && isset($schemaProperties->url) ? $schemaProperties->url : null;
+        $image = isset($schemaProperties) && isset($schemaProperties->image) ? $schemaProperties->image : null;
+        $datePublished = isset($schemaProperties) && isset($schemaProperties->datePublished) ? $schemaProperties->datePublished : null;
+        $dateModified = isset($schemaProperties) && isset($schemaProperties->dateModified) ? $schemaProperties->dateModified : null;
+        $authorName = isset($schemaProperties) && isset($schemaProperties->author->name) ? $schemaProperties->author->name : null;
+        $publisherName = isset($schemaProperties) && isset($schemaProperties->publisher->name) ? $schemaProperties->publisher->name : null;
+        $publisherLogo = isset($schemaProperties) && isset($schemaProperties->publisher->logo->url) ? $schemaProperties->publisher->logo->url : null;
+        $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
+        $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
+
         return $this->render('ceo_messages', [
-            'model' => $model
+            'model' => $model,
+            'seoData' => $seoData,
+            'name' => $name,
+            'description' => $description,
+            'url' => $url,
+            'image' => $image,
+            'datePublished' => $datePublished,
+            'dateModified' => $dateModified,
+            'authorName' => $authorName,
+            'publisherName' => $publisherName,
+            'publisherLogo' => $publisherLogo,
+            'keywords' => $keywords,
+            'mainEntityOfPage' => $mainEntityOfPage,
         ]);
     }
 
-    public function actionPrograms(Type $var = null)
+    public function actionPrograms()
     {
         $model = AboutUs::findOne(['id' => 5, 'about_category_id' => AboutUsCategory::PROGRAMS]); // programs
 
+        $seoData = Seo::findByControllerAndView('about-us', 'programs');
+
+        $schemaProperties = isset($seoData->schema_properties) ? json_decode($seoData->schema_properties) : null;
+
+        $name = isset($schemaProperties) && isset($schemaProperties->name) ? $schemaProperties->name : null;
+        $description = isset($schemaProperties) && isset($schemaProperties->description) ? $schemaProperties->description : null;
+        $url = isset($schemaProperties) && isset($schemaProperties->url) ? $schemaProperties->url : null;
+        $image = isset($schemaProperties) && isset($schemaProperties->image) ? $schemaProperties->image : null;
+        $datePublished = isset($schemaProperties) && isset($schemaProperties->datePublished) ? $schemaProperties->datePublished : null;
+        $dateModified = isset($schemaProperties) && isset($schemaProperties->dateModified) ? $schemaProperties->dateModified : null;
+        $authorName = isset($schemaProperties) && isset($schemaProperties->author->name) ? $schemaProperties->author->name : null;
+        $publisherName = isset($schemaProperties) && isset($schemaProperties->publisher->name) ? $schemaProperties->publisher->name : null;
+        $publisherLogo = isset($schemaProperties) && isset($schemaProperties->publisher->logo->url) ? $schemaProperties->publisher->logo->url : null;
+        $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
+        $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
+
         return $this->render('programs', [
-            'model' => $model
+            'model' => $model,
+            'seoData' => $seoData,
+            'name' => $name,
+            'description' => $description,
+            'url' => $url,
+            'image' => $image,
+            'datePublished' => $datePublished,
+            'dateModified' => $dateModified,
+            'authorName' => $authorName,
+            'publisherName' => $publisherName,
+            'publisherLogo' => $publisherLogo,
+            'keywords' => $keywords,
+            'mainEntityOfPage' => $mainEntityOfPage,
         ]);
     }
 
-    public function actionContact(Type $var = null)
+    public function actionContact()
     {
         $model = Contacts::findOne(['code' => 'STGABRIELPREUNIVERSITY']);
 
+        $seoData = Seo::findByControllerAndView('about-us', 'contact');
+
+        $schemaProperties = isset($seoData->schema_properties) ? json_decode($seoData->schema_properties) : null;
+
+        $name = isset($schemaProperties) && isset($schemaProperties->name) ? $schemaProperties->name : null;
+        $description = isset($schemaProperties) && isset($schemaProperties->description) ? $schemaProperties->description : null;
+        $url = isset($schemaProperties) && isset($schemaProperties->url) ? $schemaProperties->url : null;
+        $image = isset($schemaProperties) && isset($schemaProperties->image) ? $schemaProperties->image : null;
+        $datePublished = isset($schemaProperties) && isset($schemaProperties->datePublished) ? $schemaProperties->datePublished : null;
+        $dateModified = isset($schemaProperties) && isset($schemaProperties->dateModified) ? $schemaProperties->dateModified : null;
+        $authorName = isset($schemaProperties) && isset($schemaProperties->author->name) ? $schemaProperties->author->name : null;
+        $publisherName = isset($schemaProperties) && isset($schemaProperties->publisher->name) ? $schemaProperties->publisher->name : null;
+        $publisherLogo = isset($schemaProperties) && isset($schemaProperties->publisher->logo->url) ? $schemaProperties->publisher->logo->url : null;
+        $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
+        $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
+
         return $this->render('contact', [
-            'model' => $model
+            'model' => $model,
+            'seoData' => $seoData,
+            'name' => $name,
+            'description' => $description,
+            'url' => $url,
+            'image' => $image,
+            'datePublished' => $datePublished,
+            'dateModified' => $dateModified,
+            'authorName' => $authorName,
+            'publisherName' => $publisherName,
+            'publisherLogo' => $publisherLogo,
+            'keywords' => $keywords,
+            'mainEntityOfPage' => $mainEntityOfPage,
         ]);
-    }
-
-    public function actionSendEnquiry()
-    {
-        $name = Yii::$app->request->post('name');
-        $subject = Yii::$app->request->post('subject');
-        $email = Yii::$app->request->post('email');
-        $message = Yii::$app->request->post('message');
-
-        $mailer = Yii::$app->mailer->compose()
-            ->setTo('forwarder@stgabrielpreuniversity.com')
-            ->setFrom($email)
-            ->setSubject($subject)
-            ->setTextBody($message)
-            ->setHtmlBody($message);
-
-        if ($mailer->send()) {
-            Yii::$app->session->setFlash('success', 'Message Sent!');
-        } else {
-            Yii::$app->session->setFlash('error', 'Failed to send message!');
-        }
-
-        return $this->redirect(['contact']); // Replace 'contactus' with the appropriate URL after sending the email
     }
 }

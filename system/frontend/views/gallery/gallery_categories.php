@@ -1,58 +1,24 @@
 <?php
 
-use yii\bootstrap4\LinkPager as Bootstrap4LinkPager;
+use yii\bootstrap4\LinkPager;
 use yii\helpers\Url;
 use yii\helpers\Html;
 
-
-$this->title = 'List Gallery - ST Gabriel Pre University';
+$this->title = $seoData->title;
 $this->params['breadcrumbs'][] = ['label' => 'List Gallery', 'url' => ['/gallery/gallery-categories']];
 $this->params['breadcrumbs'][] = $this->title;
 
-// seo page
-$this->registerMetaTag([
-    'name' => 'keywords',
-    'content' => '
-        a level,
-        athe,
-        college,
-        college in indonesia,
-        college jakarta,
-        fast track,
-        ib diploma,
-        indonesia college, 
-        international college jakarta,
-        international school di jakarta,
-        international university indonesia,
-        international university jakarta,
-        jakarta international college,
-        kuliah cepat ijazah international,
-        kuliah di luar negeri,
-        o level,
-        ofqual accreditation,
-        pathway,
-        preuniversity,
-        preuniversity indonesia,
-        preuniversity jakarta,
-        school of business,
-        school of business jakarta,
-        sekolah fast track,
-        sekolah fast track program,
-        sekolah pathway luar negeri,
-        study abroad,
-        study business management,
-        study diploma fast track,
-        study in australia,
-        study in singapore,
-        study in uk,
-        distance learning',
-], 'keywords');
+// seo page keywords
+$this->registerMetaTag(['name' => 'keywords', 'content' => $seoData->keywords], 'keywords');
 
 // seo page description
-$this->registerMetaTag([
-    'name' => 'description',
-    'content' => 'Welcome to gallery, I hope you enjoy seeing our activities.',
-], 'description');
+$this->registerMetaTag(['name' => 'description', 'content' => $seoData->description], 'description');
+
+// seo page canonical
+$this->registerLinkTag(['rel' => 'canonical', 'href' => $seoData->canonical]);
+
+// seo page robots
+$this->registerMetaTag(['name' => 'robots', 'content' => $seoData->robots], 'robots');
 ?>
 
 <!-- Gallery section -->
@@ -73,9 +39,6 @@ $this->registerMetaTag([
                             <span><?= $value->name ?></span>
                         </div>
                     </div>
-                    <!-- <div class="event-info">
-                        <h4> // $value->name </h4>
-                    </div> -->
                 </div>
             <?php } ?>
         </div>
@@ -89,10 +52,8 @@ $this->registerMetaTag([
             <?php foreach($youtubeVideo as $video): ?>
                 <div class="col-md-4 event-item">
                         <div class="event-thumb">
-                            <!-- <div class="video"> -->
-                                <iframe width="360" height="215" src="https://www.youtube.com/embed/<?= $video['id']['videoId'] ?>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                <center><h6><?= $video['snippet']['title'] ?></h6></center>
-                            <!-- </div> -->
+                            <iframe width="360" height="215" src="https://www.youtube.com/embed/<?= $video['id']['videoId'] ?>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <center><h6><?= $video['snippet']['title'] ?></h6></center>
                         </div>
                 </div>
             <?php endforeach; ?>
@@ -100,7 +61,7 @@ $this->registerMetaTag([
 
         <div class="row">
             <center>
-                <?= Bootstrap4LinkPager::widget([
+                <?= LinkPager::widget([
                     'pagination' => $model->pagination,
                 ]);
                 ?>
@@ -112,8 +73,30 @@ $this->registerMetaTag([
 
 <?php
 $js = <<< JS
-
+{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "<?= $name ?>",
+    "description": "<?= $description ?>",
+    "url": "<?= $url ?>",
+    "image": "<?= $image ?>",
+    "datePublished": "<?= $datePublished ?>",
+    "dateModified": "<?= $dateModified ?>",
+    "author": {
+        "@type": "Person",
+        "name": "<?= $authorName ?>"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "<?= $publisherName ?>",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "<?= $publisherLogo ?>"
+        }
+    },
+    "keywords": "<?= $keywords ?>",
+    "mainEntityOfPage": "<?= $mainEntityOfPage ?>"
+}
 JS;
 
 $this->registerJs($js);
-?>

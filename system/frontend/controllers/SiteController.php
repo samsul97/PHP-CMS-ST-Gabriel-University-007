@@ -1,9 +1,8 @@
 <?php
 namespace frontend\controllers;
 
-use backend\models\AboutUs;
 use backend\models\Contacts;
-use backend\models\Slider;
+use backend\models\Seo;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
@@ -18,7 +17,6 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use frontend\models\Enquiry;
-use frontend\models\SendEnquiryForm;
 use yii\helpers\Url;
 
 /**
@@ -82,8 +80,36 @@ class SiteController extends Controller
     {
         $contactUs = Contacts::findOne(['code' => 'STGABRIELPREUNIVERSITY']);
 
+        $seoData = Seo::findByControllerAndView('site', 'index');
+
+        $schemaProperties = isset($seoData->schema_properties) ? json_decode($seoData->schema_properties) : null;
+
+        $name = isset($schemaProperties) && isset($schemaProperties->name) ? $schemaProperties->name : null;
+        $description = isset($schemaProperties) && isset($schemaProperties->description) ? $schemaProperties->description : null;
+        $url = isset($schemaProperties) && isset($schemaProperties->url) ? $schemaProperties->url : null;
+        $image = isset($schemaProperties) && isset($schemaProperties->image) ? $schemaProperties->image : null;
+        $datePublished = isset($schemaProperties) && isset($schemaProperties->datePublished) ? $schemaProperties->datePublished : null;
+        $dateModified = isset($schemaProperties) && isset($schemaProperties->dateModified) ? $schemaProperties->dateModified : null;
+        $authorName = isset($schemaProperties) && isset($schemaProperties->author->name) ? $schemaProperties->author->name : null;
+        $publisherName = isset($schemaProperties) && isset($schemaProperties->publisher->name) ? $schemaProperties->publisher->name : null;
+        $publisherLogo = isset($schemaProperties) && isset($schemaProperties->publisher->logo->url) ? $schemaProperties->publisher->logo->url : null;
+        $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
+        $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
+
         return $this->render('index', [
             'contactUs' => $contactUs,
+            'seoData' => $seoData,
+            'name' => $name,
+            'description' => $description,
+            'url' => $url,
+            'image' => $image,
+            'datePublished' => $datePublished,
+            'dateModified' => $dateModified,
+            'authorName' => $authorName,
+            'publisherName' => $publisherName,
+            'publisherLogo' => $publisherLogo,
+            'keywords' => $keywords,
+            'mainEntityOfPage' => $mainEntityOfPage,
         ]);
     }
 
@@ -287,14 +313,12 @@ class SiteController extends Controller
                 ->send();
                 
             if ($mailer) {
-                // Yii::$app->session->setFlash('success', 'Message Sent!');
                 Yii::$app->getSession()->setFlash('send_email_success', [
                     'type'     => 'success',
                     'duration' => 5000,
                     'title'    => 'System Information',
                     'message'  => 'Application sent!',
                 ]);
-
             } else {
                 Yii::$app->session->setFlash('error', 'Failed to send message!');
             }
@@ -309,10 +333,15 @@ class SiteController extends Controller
         $urls = [
             ['loc' => Url::to(['site/index'], true)],
             ['loc' => Url::to(['about-us/profile'], true)],
-            ['loc' => Url::to(['about-us/profile'], true)],
             ['loc' => Url::to(['about-us/lecturer'], true)],
             ['loc' => Url::to(['about-us/ceomessage'], true)],
             ['loc' => Url::to(['about-us/programs'], true)],
+            ['loc' => Url::to(['about-us/contact'], true)],
+            ['loc' => Url::to(['article/articles'], true)],
+            ['loc' => Url::to(['article/article-one'], true)],
+            ['loc' => Url::to(['gallery/gallery-categories'], true)],
+            ['loc' => Url::to(['gallery/gallery'], true)],
+            ['loc' => Url::to(['gallery/gallery-detail'], true)],
             ['loc' => Url::to(['partners/partners'], true)],
             ['loc' => Url::to(['student/why-stgabriel'], true)],
             ['loc' => Url::to(['student/scs'], true)],
@@ -320,9 +349,6 @@ class SiteController extends Controller
             ['loc' => Url::to(['student/pastoral-conseling'], true)],
             ['loc' => Url::to(['student/handbook'], true)],
             ['loc' => Url::to(['testimonys/testimonys'], true)],
-            ['loc' => Url::to(['gallery/gallery-categories'], true)],
-            ['loc' => Url::to(['article/articles'], true)],
-            ['loc' => Url::to(['about-us/contact'], true)],
         ];
 
         return [

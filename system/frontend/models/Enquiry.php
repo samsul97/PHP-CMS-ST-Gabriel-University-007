@@ -30,7 +30,6 @@ class Enquiry extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            // [['name', 'email', 'subject', 'message'], 'required'],
             ['email', 'email'],
             [['message'], 'string'],
             [['timestamp'], 'safe'],

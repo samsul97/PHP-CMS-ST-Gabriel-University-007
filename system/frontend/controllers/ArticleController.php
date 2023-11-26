@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use Yii;
 use backend\models\Article;
 use backend\models\ArticleSearch;
+use backend\models\Seo;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -15,9 +16,6 @@ use yii\filters\VerbFilter;
  */
 class ArticleController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
     public function behaviors()
     {
         return [
@@ -30,93 +28,6 @@ class ArticleController extends Controller
         ];
     }
 
-    /**
-     * Lists all Article models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new ArticleSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Displays a single Article model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new Article model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Article();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Updates an existing Article model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Deletes an existing Article model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Article model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Article the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = Article::findOne($id)) !== null) {
@@ -145,33 +56,75 @@ class ArticleController extends Controller
         
         $dataProvider = $searchModel->search();
 
+        $seoData = Seo::findByControllerAndView('article', 'articles');
+
+        $schemaProperties = isset($seoData->schema_properties) ? json_decode($seoData->schema_properties) : null;
+
+        $name = isset($schemaProperties) && isset($schemaProperties->name) ? $schemaProperties->name : null;
+        $description = isset($schemaProperties) && isset($schemaProperties->description) ? $schemaProperties->description : null;
+        $url = isset($schemaProperties) && isset($schemaProperties->url) ? $schemaProperties->url : null;
+        $image = isset($schemaProperties) && isset($schemaProperties->image) ? $schemaProperties->image : null;
+        $datePublished = isset($schemaProperties) && isset($schemaProperties->datePublished) ? $schemaProperties->datePublished : null;
+        $dateModified = isset($schemaProperties) && isset($schemaProperties->dateModified) ? $schemaProperties->dateModified : null;
+        $authorName = isset($schemaProperties) && isset($schemaProperties->author->name) ? $schemaProperties->author->name : null;
+        $publisherName = isset($schemaProperties) && isset($schemaProperties->publisher->name) ? $schemaProperties->publisher->name : null;
+        $publisherLogo = isset($schemaProperties) && isset($schemaProperties->publisher->logo->url) ? $schemaProperties->publisher->logo->url : null;
+        $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
+        $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
+
         return $this->render('articles', [
             'model' => $model,
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'seoData' => $seoData,
+            'name' => $name,
+            'description' => $description,
+            'url' => $url,
+            'image' => $image,
+            'datePublished' => $datePublished,
+            'dateModified' => $dateModified,
+            'authorName' => $authorName,
+            'publisherName' => $publisherName,
+            'publisherLogo' => $publisherLogo,
+            'keywords' => $keywords,
+            'mainEntityOfPage' => $mainEntityOfPage,
         ]);
-
     }
 
     public function actionArticleOne($id)
     {
         $model = Article::findAll($id);
 
+        $seoData = Seo::findByControllerAndView('article', 'article-one');
+
+        $schemaProperties = isset($seoData->schema_properties) ? json_decode($seoData->schema_properties) : null;
+
+        $name = isset($schemaProperties) && isset($schemaProperties->name) ? $schemaProperties->name : null;
+        $description = isset($schemaProperties) && isset($schemaProperties->description) ? $schemaProperties->description : null;
+        $url = isset($schemaProperties) && isset($schemaProperties->url) ? $schemaProperties->url : null;
+        $image = isset($schemaProperties) && isset($schemaProperties->image) ? $schemaProperties->image : null;
+        $datePublished = isset($schemaProperties) && isset($schemaProperties->datePublished) ? $schemaProperties->datePublished : null;
+        $dateModified = isset($schemaProperties) && isset($schemaProperties->dateModified) ? $schemaProperties->dateModified : null;
+        $authorName = isset($schemaProperties) && isset($schemaProperties->author->name) ? $schemaProperties->author->name : null;
+        $publisherName = isset($schemaProperties) && isset($schemaProperties->publisher->name) ? $schemaProperties->publisher->name : null;
+        $publisherLogo = isset($schemaProperties) && isset($schemaProperties->publisher->logo->url) ? $schemaProperties->publisher->logo->url : null;
+        $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
+        $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
+
         return $this->render('article_one', [
             'model' => $model,
+            'seoData' => $seoData,
+            'name' => $name,
+            'description' => $description,
+            'url' => $url,
+            'image' => $image,
+            'datePublished' => $datePublished,
+            'dateModified' => $dateModified,
+            'authorName' => $authorName,
+            'publisherName' => $publisherName,
+            'publisherLogo' => $publisherLogo,
+            'keywords' => $keywords,
+            'mainEntityOfPage' => $mainEntityOfPage,
         ]);
     }
-
-    // public function actionSearchArticle()
-    // {
-    //     $searchModel = new ArticleSearch(); // Create your search model
-    //     $searchModel->load(Yii::$app->request->get()); // Load search parameters from GET request
-
-    //     $dataProvider = $searchModel->search();
-
-    //     return $this->render('_search_articles', [
-    //         'searchModel' => $searchModel,
-    //         'dataProvider' => $dataProvider,
-    //     ]);
-    // }
 }
