@@ -162,10 +162,30 @@ $('#seo-controller').on('change', function(e) {
                     // Data exists, autofill the form
                     $("#seo-title").val(response.data.title);
                     $("#seo-keywords").val(response.data.keywords);
+                    $("#seo-description").val(response.data.description);
+                    $("#seo-canonical").val(response.data.canonical);
+                    $("#seo-heading_1").val(response.data.heading_1);
+                    $("#seo-heading_2").val(response.data.heading_2);
+                    $("#seo-heading_3").val(response.data.heading_3);
+                    $("#seo-heading_4").val(response.data.heading_4);
+                    $("#seo-heading_5").val(response.data.heading_5);
+                    $("#seo-heading_6").val(response.data.heading_6);
+                    $("#seo-robots").val(response.data.robots);
+                    $("#seo-schema_properties").val(response.data.schema_properties);
                 } else {
                     // Data doesn't exist, leave the form fields as they are
                     $("#seo-title").val('');
                     $("#seo-keywords").val('');
+                    $("#seo-description").val('');
+                    $("#seo-canonical").val('');
+                    $("#seo-heading_1").val('');
+                    $("#seo-heading_2").val('');
+                    $("#seo-heading_3").val('');
+                    $("#seo-heading_4").val('');
+                    $("#seo-heading_5").val('');
+                    $("#seo-heading_6").val('');
+                    $("#seo-robots").val('');
+                    $("#seo-schema_properties").val('');
                 }
             },
             error: function(error) {
