@@ -130,4 +130,13 @@ class SeoController extends Controller
             'data' => $data ? $data->attributes : null,
         ];
     }
+
+    public function actionDetail($id)
+    {
+        $model = $this->findModel($id);
+
+        return $this->renderAjax('_detail', [
+            'model' => $model,
+        ]);
+    }
 }

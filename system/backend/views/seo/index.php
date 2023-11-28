@@ -1,5 +1,6 @@
 <?php
 
+use yii\bootstrap4\Modal;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -51,19 +52,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     'controller',
                     'view',
-                    'title',
-                    'keywords:ntext',
                     'canonical',
 
                     [
                         'class' => 'yii\grid\ActionColumn',
                         'header' => 'Action',
-                        'template' => '{view}',
+                        'template' => '{detail}',
                         'buttons' => [
-                            'view' => function($url, $model) {
+                            'detail' => function($url, $model) {
                                 return Html::a('<button class="btn btn-sm btn-primary"><i class="fa fa-search"></i></button>', 
-                                    ['view', 'id' => $model['id']], 
-                                    ['title' => 'View']);
+                                    ['detail', 'id' => $model['id']], 
+                                    ['title' => 'Detail', 'class' => 'seo-detail', 'data' => 
+                                    ['method' => 'post', 'data-pjax' => '0']
+                                ]);
                             },
                         ]
                     ],
@@ -80,3 +81,37 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <!-- /.card -->
 </div>
+
+
+<?php
+$js = <<< JS
+$(".seo-detail").on("click", function(e) {
+    e.preventDefault();
+    url = $(this).attr('href');
+    console.log(url);
+    $('#seoDetail')
+        .modal('show')
+        .find('.modal-body')
+        .html('Loading ...')
+        .load(url);
+        return false;
+});
+JS;
+
+$this->registerJs($js);
+
+Modal::begin([
+    'id' => 'seoDetail',
+    'size' => Modal::SIZE_LARGE,
+    'title' => 'Detail SEO',
+    'closeButton' => [
+        'id'=>'close-button',
+        'class'=>'close',
+        'data-dismiss' =>'modal',
+    ],
+    'clientOptions' => [
+        'backdrop' => false, 'keyboard' => true
+    ]
+]);
+
+Modal::end();
