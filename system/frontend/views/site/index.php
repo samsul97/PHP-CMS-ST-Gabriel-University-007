@@ -45,30 +45,40 @@ CSS;
 $this->registerCss($css);
 
 $js = <<< JS
-{
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "<?= $name ?>",
-    "description": "<?= $description ?>",
-    "url": "<?= $url ?>",
-    "image": "<?= $image ?>",
-    "datePublished": "<?= $datePublished ?>",
-    "dateModified": "<?= $dateModified ?>",
-    "author": {
-        "@type": "Person",
-        "name": "<?= $authorName ?>"
-    },
-    "publisher": {
-        "@type": "Organization",
-        "name": "<?= $publisherName ?>",
-        "logo": {
-            "@type": "ImageObject",
-            "url": "<?= $publisherLogo ?>"
-        }
-    },
-    "keywords": "<?= $keywords ?>",
-    "mainEntityOfPage": "<?= $mainEntityOfPage ?>"
+function setSchemaProperties() {
+    return {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "<?= $name ?>",
+        "description": "<?= $description ?>",
+        "url": "<?= $url ?>",
+        "image": "<?= $image ?>",
+        "datePublished": "<?= $datePublished ?>",
+        "dateModified": "<?= $dateModified ?>",
+        "author": {
+            "@type": "Person",
+            "name": "<?= $authorName ?>"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "<?= $publisherName ?>",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "<?= $publisherLogo ?>"
+            }
+        },
+        "keywords": "<?= $keywords ?>",
+        "mainEntityOfPage": "<?= $mainEntityOfPage ?>"
+    };
 }
+
+// Set schema properties
+var schemaProperties = setSchemaProperties();
+
+var scriptTag = document.createElement("script");
+scriptTag.type = "application/ld+json";
+scriptTag.innerHTML = JSON.stringify(schemaProperties);
+document.head.appendChild(scriptTag);
 JS;
 
 $this->registerJs($js);
