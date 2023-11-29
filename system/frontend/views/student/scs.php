@@ -1,20 +1,20 @@
 <?php
 
-$this->title = $seoData->title;
+$this->title = isset($seoData->title) ? $seoData->title : 'Student Care Service';
 $this->params['breadcrumbs'][] = ['label' => 'Student Care Service', 'url' => ['/student/scs']];
 $this->params['breadcrumbs'][] = $this->title;
 
 // seo page keywords
-$this->registerMetaTag(['name' => 'keywords', 'content' => $seoData->keywords], 'keywords');
+$this->registerMetaTag(['name' => 'keywords', 'content' => isset($seoData->keywords) ?? ''], 'keywords');
 
 // seo page description
-$this->registerMetaTag(['name' => 'description', 'content' => $seoData->description], 'description');
+$this->registerMetaTag(['name' => 'description', 'content' => isset($seoData->description) ?? ''], 'description');
 
 // seo page canonical
-$this->registerLinkTag(['rel' => 'canonical', 'href' => $seoData->canonical]);
+$this->registerLinkTag(['rel' => 'canonical', 'href' => isset($seoData->canonical) ?? '']);
 
 // seo page robots
-$this->registerMetaTag(['name' => 'robots', 'content' => $seoData->robots], 'robots');
+$this->registerMetaTag(['name' => 'robots', 'content' => isset($seoData->robots) ?? ''], 'robots');
 
 ?>
 

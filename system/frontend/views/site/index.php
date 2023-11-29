@@ -1,17 +1,17 @@
 <?php
-$this->title = $seoData->title ?? null;
+$this->title = isset($seoData->title) ? $seoData->title : 'Home';
 
 // seo page keywords
-$this->registerMetaTag(['name' => 'keywords', 'content' => $seoData->keywords ?? null], 'keywords');
+$this->registerMetaTag(['name' => 'keywords', 'content' => isset($seoData->keywords) ?? ''], 'keywords');
 
 // seo page description
-$this->registerMetaTag(['name' => 'description', 'content' => $seoData->description ?? null], 'description');
+$this->registerMetaTag(['name' => 'description', 'content' => isset($seoData->description) ?? ''], 'description');
 
 // seo page canonical
-$this->registerLinkTag(['rel' => 'canonical', 'href' => $seoData->canonical ?? null]);
+$this->registerLinkTag(['rel' => 'canonical', 'href' => isset($seoData->canonical) ?? '']);
 
 // seo page robots
-$this->registerMetaTag(['name' => 'robots', 'content' => $seoData->robots ?? null], 'robots');
+$this->registerMetaTag(['name' => 'robots', 'content' => isset($seoData->robots) ?? ''], 'robots');
 
 ?>
 
