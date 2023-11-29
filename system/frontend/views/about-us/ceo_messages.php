@@ -5,16 +5,16 @@ $this->params['breadcrumbs'][] = ['label' => 'Ceo Message', 'url' => ['/about-us
 $this->params['breadcrumbs'][] = $this->title;
 
 // seo page keywords
-$this->registerMetaTag(['name' => 'keywords', 'content' => $seoData->keywords ?? null], 'keywords');
+$this->registerMetaTag(['name' => 'keywords', 'content' => $seoData->keywords ?? ''], 'keywords');
 
 // seo page description
-$this->registerMetaTag(['name' => 'description', 'content' => $seoData->description ?? null], 'description');
+$this->registerMetaTag(['name' => 'description', 'content' => $seoData->description ?? ''], 'description');
 
 // seo page canonical
-$this->registerLinkTag(['rel' => 'canonical', 'href' => $seoData->canonical ?? null]);
+$this->registerLinkTag(['rel' => 'canonical', 'href' => $seoData->canonical ?? '']);
 
 // seo page robots
-$this->registerMetaTag(['name' => 'robots', 'content' => $seoData->robots ?? null], 'robots');
+$this->registerMetaTag(['name' => 'robots', 'content' => $seoData->robots ?? ''], 'robots');
 
 ?>
 
