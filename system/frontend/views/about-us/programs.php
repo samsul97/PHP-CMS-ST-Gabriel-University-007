@@ -29,7 +29,7 @@ $this->registerMetaTag(['name' => 'robots', 'content' => isset($seoData->robots)
         </div>
         <div class="row">
             <?php
-                $image = $model->content && is_file(Yii::getAlias('@webroot') . '/backend' . $model->content) ? $model->content : '';
+                $image = $model->image && is_file(Yii::getAlias('@webroot') . '/backend' . $model->image) ? $model->image : '';
             ?>
             <img width="100%" height="100%"src="<?= Url::base(). '/backend' . $image ?>" alt="Programs ST Gabriel Pre University">
         </div>
