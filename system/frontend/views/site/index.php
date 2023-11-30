@@ -8,10 +8,10 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => isset($seoData->keywo
 $this->registerMetaTag(['name' => 'description', 'content' => isset($seoData->description) ? $seoData->description : ''], 'description');
 
 // seo page canonical
-$this->registerLinkTag(['rel' => 'canonical', 'href' => isset($seoData->canonical) ?? '']);
+$this->registerLinkTag(['rel' => 'canonical', 'href' => isset($seoData->canonical) ? $seoData->canonical : '']);
 
 // seo page robots
-$this->registerMetaTag(['name' => 'robots', 'content' => isset($seoData->robots) ?? ''], 'robots');
+$this->registerMetaTag(['name' => 'robots', 'content' => isset($seoData->robots) ? $seoData->robots : ''], 'robots');
 
 ?>
 
