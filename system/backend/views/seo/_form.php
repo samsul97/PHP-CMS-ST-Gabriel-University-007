@@ -95,13 +95,24 @@ foreach ($frontend_controllerlist as $frontend_controller)
 
     <div class="row">
         <div class="col-md-6">
-            <?= $form->field($model, 'title')->textInput(['maxlength' => true, 'placeholder' => 'Title']) ?>
+            <?= $form->field($model, 'title')->textInput(['maxlength' => true, 'placeholder' => 'Enter a concise and descriptive title for the page']) ?>
         
-            <?= $form->field($model, 'keywords')->textarea(['rows' => 6, 'placeholder' => 'Keywords']) ?>
+            <?= $form->field($model, 'keywords')->textarea([
+                'rows' => 6, 
+                'placeholder' => 'Enter keywords or phrases separated by commas that represent the main topics of your content.' . PHP_EOL . PHP_EOL . 'Example: technology, innovation, gadgets', 
+                'class' => 'form-control auto-resize-textarea'
+            ]) ?>
         
-            <?= $form->field($model, 'description')->textarea(['rows' => 6, 'placeholder' => 'Description']) ?>
+            <?= $form->field($model, 'description')->textarea([
+                'rows' => 6, 
+                'placeholder' => 'Provide a brief and informative description of the page content. This will be displayed in search engine results.' . PHP_EOL . PHP_EOL . 'Example: Explore the latest in technology and innovation with our cutting-edge gadgets', 
+                'class' => 'form-control auto-resize-textarea'
+            ]) ?>
         
-            <?= $form->field($model, 'canonical')->textInput(['maxlength' => true, 'placeholder' => 'Example : https://www.stgabrielpreuniversity.com/about-us/profile']) ?>
+            <?= $form->field($model, 'canonical')->textInput([
+                'maxlength' => true,
+                'placeholder' => 'Enter the canonical URL of this page (e.g., https://www.example.com/page)'
+            ]) ?>
 
             <?= $form->field($model, 'heading_1')->textInput(['maxlength' => true, 'placeholder' => 'Optional']) ?>
         
@@ -115,11 +126,19 @@ foreach ($frontend_controllerlist as $frontend_controller)
         
             <?= $form->field($model, 'heading_6')->textInput(['maxlength' => true, 'placeholder' => 'Optional']) ?>
 
-            <?= $form->field($model, 'robots')->textInput(['maxlength' => true, 'placeholder' => 'To control search engine']) ?>
+            <?= $form->field($model, 'robots')->textInput([
+                'maxlength' => true,
+                'placeholder' => 'Specify directives for search engine robots (e.g., "index, follow" or "noindex, nofollow")'
+            ])
+            ->hint('For more information, refer to the <a href="https://developers.google.com/search/docs/crawling-indexing/robots-meta-tag" target="_blank">Robots Meta Tag documentation</a>.') ?>
+
         </div>
 
         <div class="col-md-6">
-            <?= $form->field($model, 'schema_properties')->textarea(['rows' => 57, 'placeholder' => 'Page identification tool']) ?>
+            <?= $form->field($model, 'schema_properties')->textarea([
+                'rows' => 57, 
+                'placeholder' => 'Enter structured data properties using Schema.org vocabulary to enhance search engine understanding.'
+            ]) ?>
         </div>
     </div>
     
@@ -194,6 +213,18 @@ $('#seo-controller').on('change', function(e) {
         });
     });
 });
+
+// auto resize textarea
+const tx = document.getElementsByClassName("auto-resize-textarea");
+for (let i = 0; i < tx.length; i++) {
+    tx[i].setAttribute("style", "height:" + (tx[i].scrollHeight) + "px;overflow-y:hidden;");
+    tx[i].addEventListener("input", OnInput, false);
+}
+
+function OnInput() {
+    this.style.height = "auto";
+    this.style.height = (this.scrollHeight) + "px";
+}
 JS;
 
 $this->registerJs($js);

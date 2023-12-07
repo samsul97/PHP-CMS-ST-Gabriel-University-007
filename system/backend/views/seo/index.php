@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="card-body">
 
         <p>
-            <?= Html::a(Yii::t('app', 'create_or_update_seo'), ['create-update'], ['class' => 'btn btn-success']) ?>
+            <?= Html::a(Yii::t('app', 'Create or Update SEO'), ['create-update'], ['class' => 'btn btn-success']) ?>
         </p>
 
         <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
