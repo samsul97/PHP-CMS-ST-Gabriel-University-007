@@ -40,6 +40,7 @@ class AppAsset extends AssetBundle
         'https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js',
         "backend/plugins/sweetalert2/sweetalert2.all.js",
         // 'https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js'
+        "system/node_modules/socket.io-client/dist/socket.io.js",
     ];
     public $depends = [
         'yii\web\YiiAsset',

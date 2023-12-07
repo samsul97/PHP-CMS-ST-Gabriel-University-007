@@ -1,0 +1,37 @@
+{
+  "name": "ST Gabriel Pre University",
+  "version": "1.0.0",
+  "description": "University",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samsul97/PHP-CMS-ST-Gabriel-University-007"
+  },
+  "keywords": [
+    "Yii2",
+    "Realtime",
+    "Website",
+    "StGabriel"
+  ],
+  "author": "Samsul Hadi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/samsul97/PHP-CMS-ST-Gabriel-University-007/issues"
+  },
+  "homepage": "https://github.com/samsul97/PHP-CMS-ST-Gabriel-University-007#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "gulp": "^4.0.2",
+    "http": "0.0.1-security",
+    "redis": "^3.1.1",
+    "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.2",
+    "uuid": "^9.0.1"
+  }
+}
