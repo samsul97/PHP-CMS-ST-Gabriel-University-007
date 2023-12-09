@@ -6,6 +6,7 @@ use Yii;
 use backend\models\Student;
 use backend\models\StudentCategory;
 use backend\models\Seo;
+use backend\models\VisitorLog;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -56,6 +57,8 @@ class StudentController extends Controller
         $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
         $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
 
+        $visitorInformation = VisitorLog::getVisitorInformation();
+
         return $this->render('why', [
             'model' => $model,
             'seoData' => $seoData,
@@ -70,6 +73,14 @@ class StudentController extends Controller
             'publisherLogo' => $publisherLogo,
             'keywords' => $keywords,
             'mainEntityOfPage' => $mainEntityOfPage,
+            'ipAddress' => $visitorInformation['ipAddress'],
+            'browser' => $visitorInformation['browser'],
+            'os' => $visitorInformation['os'],
+            'geoLocation' => $visitorInformation['geoLocation'],
+            'language' => $visitorInformation['language'],
+            'referrer' => $visitorInformation['referrer'],
+            'currentUrl' => $visitorInformation['currentUrl'],
+            'visitTime' => $visitorInformation['visitTime'],
         ]);
     }
 
@@ -93,6 +104,8 @@ class StudentController extends Controller
         $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
         $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
 
+        $visitorInformation = VisitorLog::getVisitorInformation();
+
         return $this->render('scs', [
             'model' => $model,
             'seoData' => $seoData,
@@ -107,7 +120,14 @@ class StudentController extends Controller
             'publisherLogo' => $publisherLogo,
             'keywords' => $keywords,
             'mainEntityOfPage' => $mainEntityOfPage,
-
+            'ipAddress' => $visitorInformation['ipAddress'],
+            'browser' => $visitorInformation['browser'],
+            'os' => $visitorInformation['os'],
+            'geoLocation' => $visitorInformation['geoLocation'],
+            'language' => $visitorInformation['language'],
+            'referrer' => $visitorInformation['referrer'],
+            'currentUrl' => $visitorInformation['currentUrl'],
+            'visitTime' => $visitorInformation['visitTime'],
         ]);
     }
     
@@ -131,6 +151,8 @@ class StudentController extends Controller
         $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
         $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
 
+        $visitorInformation = VisitorLog::getVisitorInformation();
+
         return $this->render('alumni', [
             'model' => $model,
             'seoData' => $seoData,
@@ -145,6 +167,14 @@ class StudentController extends Controller
             'publisherLogo' => $publisherLogo,
             'keywords' => $keywords,
             'mainEntityOfPage' => $mainEntityOfPage,
+            'ipAddress' => $visitorInformation['ipAddress'],
+            'browser' => $visitorInformation['browser'],
+            'os' => $visitorInformation['os'],
+            'geoLocation' => $visitorInformation['geoLocation'],
+            'language' => $visitorInformation['language'],
+            'referrer' => $visitorInformation['referrer'],
+            'currentUrl' => $visitorInformation['currentUrl'],
+            'visitTime' => $visitorInformation['visitTime'],
         ]);
     }
     
@@ -168,6 +198,8 @@ class StudentController extends Controller
         $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
         $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
 
+        $visitorInformation = VisitorLog::getVisitorInformation();
+
         return $this->render('pastoral', [
             'model' => $model,
             'seoData' => $seoData,
@@ -182,6 +214,14 @@ class StudentController extends Controller
             'publisherLogo' => $publisherLogo,
             'keywords' => $keywords,
             'mainEntityOfPage' => $mainEntityOfPage,
+            'ipAddress' => $visitorInformation['ipAddress'],
+            'browser' => $visitorInformation['browser'],
+            'os' => $visitorInformation['os'],
+            'geoLocation' => $visitorInformation['geoLocation'],
+            'language' => $visitorInformation['language'],
+            'referrer' => $visitorInformation['referrer'],
+            'currentUrl' => $visitorInformation['currentUrl'],
+            'visitTime' => $visitorInformation['visitTime'],
         ]);
     }
 
@@ -205,6 +245,8 @@ class StudentController extends Controller
         $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
         $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
 
+        $visitorInformation = VisitorLog::getVisitorInformation();
+
         return $this->render('handbook', [
             'model' => $model,
             'seoData' => $seoData,
@@ -219,6 +261,14 @@ class StudentController extends Controller
             'publisherLogo' => $publisherLogo,
             'keywords' => $keywords,
             'mainEntityOfPage' => $mainEntityOfPage,
+            'ipAddress' => $visitorInformation['ipAddress'],
+            'browser' => $visitorInformation['browser'],
+            'os' => $visitorInformation['os'],
+            'geoLocation' => $visitorInformation['geoLocation'],
+            'language' => $visitorInformation['language'],
+            'referrer' => $visitorInformation['referrer'],
+            'currentUrl' => $visitorInformation['currentUrl'],
+            'visitTime' => $visitorInformation['visitTime'],
         ]);
     }
 }

@@ -3,6 +3,8 @@
 namespace backend\models;
 
 use Yii;
+use yii\helpers\Url;
+use GeoIp2\Database\Reader;
 
 /**
  * This is the model class for table "visitor_log".
@@ -200,5 +202,74 @@ class VisitorLog extends \yii\db\ActiveRecord
         return static::find()
             ->select(['COUNT(DISTINCT ip_address) AS count'])
             ->scalar();
+    }
+
+    public static function getVisitorInformation()
+    {
+        $ipAddress = Yii::$app->request->userIP;
+        $userAgent = Yii::$app->request->userAgent;
+        $browser = self::detectBrowser($userAgent);
+        $os = self::detectOperatingSystem($userAgent);
+
+        $path = Yii::getAlias('@webroot/system/GeoLite2-City.mmdb');
+
+        try {
+            $reader = new Reader($path);
+            $location = $reader->city($ipAddress);
+            $geoLocation = $location->country->name;
+        } catch (\GeoIp2\Exception\AddressNotFoundException $e) {
+            $geoLocation = 'Unknown';
+        } catch (\Exception $e) {
+            Yii::error('Exception: ' . $e->getMessage(), 'visitorLog');
+            $geoLocation = 'Unknown';
+        }
+
+        $language = Yii::$app->language;
+        $referrer = Yii::$app->request->referrer;
+        $currentUrl = Url::to('', true);
+        $visitTime = date('Y-m-d H:i:s');
+
+        return [
+            'ipAddress' => $ipAddress,
+            'browser' => $browser,
+            'os' => $os,
+            'geoLocation' => $geoLocation,
+            'language' => $language,
+            'referrer' => $referrer,
+            'currentUrl' => $currentUrl,
+            'visitTime' => $visitTime,
+        ];
+    }
+
+    private static function detectBrowser($userAgent)
+    {
+        if (preg_match('/MSIE|Trident/i', $userAgent)) {
+            $browser = 'Internet Explorer';
+        } elseif (preg_match('/Firefox/i', $userAgent)) {
+            $browser = 'Firefox';
+        } elseif (preg_match('/Chrome/i', $userAgent)) {
+            $browser = 'Chrome';
+        } else {
+            $browser = 'Unknown';
+        }
+
+        return $browser;
+    }
+
+    private static function detectOperatingSystem($userAgent)
+    {
+        if (preg_match('/Windows/i', $userAgent)) {
+            $os = 'Windows';
+        } elseif (preg_match('/Mac OS X/i', $userAgent)) {
+            $os = 'Mac OS X';
+        } elseif (preg_match('/Android/i', $userAgent)) {
+            $os = 'Android';
+        } elseif (preg_match('/iPhone/i', $userAgent)) {
+            $os = 'iPhone';
+        } else {
+            $os = 'Unknown';
+        }
+
+        return $os;
     }
 }

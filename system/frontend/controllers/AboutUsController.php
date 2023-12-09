@@ -7,6 +7,7 @@ use backend\models\Contacts;
 use Yii;
 use backend\models\AboutUs;
 use backend\models\Seo;
+use backend\models\VisitorLog;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -57,6 +58,8 @@ class AboutUsController extends Controller
         $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
         $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
 
+        $visitorInformation = VisitorLog::getVisitorInformation();
+
         return $this->render('profile', [
             'model' => $model,
             'seoData' => $seoData,
@@ -71,6 +74,14 @@ class AboutUsController extends Controller
             'publisherLogo' => $publisherLogo,
             'keywords' => $keywords,
             'mainEntityOfPage' => $mainEntityOfPage,
+            'ipAddress' => $visitorInformation['ipAddress'],
+            'browser' => $visitorInformation['browser'],
+            'os' => $visitorInformation['os'],
+            'geoLocation' => $visitorInformation['geoLocation'],
+            'language' => $visitorInformation['language'],
+            'referrer' => $visitorInformation['referrer'],
+            'currentUrl' => $visitorInformation['currentUrl'],
+            'visitTime' => $visitorInformation['visitTime'],
         ]);
     }
 
@@ -131,6 +142,8 @@ class AboutUsController extends Controller
         $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
         $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
 
+        $visitorInformation = VisitorLog::getVisitorInformation();
+
         return $this->render('lecturer', [
             'model' => $model,
             'seoData' => $seoData,
@@ -145,6 +158,14 @@ class AboutUsController extends Controller
             'publisherLogo' => $publisherLogo,
             'keywords' => $keywords,
             'mainEntityOfPage' => $mainEntityOfPage,
+            'ipAddress' => $visitorInformation['ipAddress'],
+            'browser' => $visitorInformation['browser'],
+            'os' => $visitorInformation['os'],
+            'geoLocation' => $visitorInformation['geoLocation'],
+            'language' => $visitorInformation['language'],
+            'referrer' => $visitorInformation['referrer'],
+            'currentUrl' => $visitorInformation['currentUrl'],
+            'visitTime' => $visitorInformation['visitTime'],
         ]);
     }
     
@@ -168,6 +189,8 @@ class AboutUsController extends Controller
         $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
         $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
 
+        $visitorInformation = VisitorLog::getVisitorInformation();
+
         return $this->render('ceo_messages', [
             'model' => $model,
             'seoData' => $seoData,
@@ -182,6 +205,14 @@ class AboutUsController extends Controller
             'publisherLogo' => $publisherLogo,
             'keywords' => $keywords,
             'mainEntityOfPage' => $mainEntityOfPage,
+            'ipAddress' => $visitorInformation['ipAddress'],
+            'browser' => $visitorInformation['browser'],
+            'os' => $visitorInformation['os'],
+            'geoLocation' => $visitorInformation['geoLocation'],
+            'language' => $visitorInformation['language'],
+            'referrer' => $visitorInformation['referrer'],
+            'currentUrl' => $visitorInformation['currentUrl'],
+            'visitTime' => $visitorInformation['visitTime'],
         ]);
     }
 
@@ -205,6 +236,8 @@ class AboutUsController extends Controller
         $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
         $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
 
+        $visitorInformation = VisitorLog::getVisitorInformation();
+
         return $this->render('programs', [
             'model' => $model,
             'seoData' => $seoData,
@@ -219,6 +252,14 @@ class AboutUsController extends Controller
             'publisherLogo' => $publisherLogo,
             'keywords' => $keywords,
             'mainEntityOfPage' => $mainEntityOfPage,
+            'ipAddress' => $visitorInformation['ipAddress'],
+            'browser' => $visitorInformation['browser'],
+            'os' => $visitorInformation['os'],
+            'geoLocation' => $visitorInformation['geoLocation'],
+            'language' => $visitorInformation['language'],
+            'referrer' => $visitorInformation['referrer'],
+            'currentUrl' => $visitorInformation['currentUrl'],
+            'visitTime' => $visitorInformation['visitTime'],
         ]);
     }
 
@@ -242,6 +283,8 @@ class AboutUsController extends Controller
         $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
         $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
 
+        $visitorInformation = VisitorLog::getVisitorInformation();
+        
         return $this->render('contact', [
             'model' => $model,
             'seoData' => $seoData,
@@ -256,6 +299,14 @@ class AboutUsController extends Controller
             'publisherLogo' => $publisherLogo,
             'keywords' => $keywords,
             'mainEntityOfPage' => $mainEntityOfPage,
+            'ipAddress' => $visitorInformation['ipAddress'],
+            'browser' => $visitorInformation['browser'],
+            'os' => $visitorInformation['os'],
+            'geoLocation' => $visitorInformation['geoLocation'],
+            'language' => $visitorInformation['language'],
+            'referrer' => $visitorInformation['referrer'],
+            'currentUrl' => $visitorInformation['currentUrl'],
+            'visitTime' => $visitorInformation['visitTime'],
         ]);
     }
 }

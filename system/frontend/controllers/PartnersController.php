@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use Yii;
 use backend\models\Partners;
 use backend\models\Seo;
+use backend\models\VisitorLog;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -55,6 +56,8 @@ class PartnersController extends Controller
         $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
         $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
 
+        $visitorInformation = VisitorLog::getVisitorInformation();
+
         return $this->render('partners', [
             'model' => $model,
             'seoData' => $seoData,
@@ -69,7 +72,14 @@ class PartnersController extends Controller
             'publisherLogo' => $publisherLogo,
             'keywords' => $keywords,
             'mainEntityOfPage' => $mainEntityOfPage,
-
+            'ipAddress' => $visitorInformation['ipAddress'],
+            'browser' => $visitorInformation['browser'],
+            'os' => $visitorInformation['os'],
+            'geoLocation' => $visitorInformation['geoLocation'],
+            'language' => $visitorInformation['language'],
+            'referrer' => $visitorInformation['referrer'],
+            'currentUrl' => $visitorInformation['currentUrl'],
+            'visitTime' => $visitorInformation['visitTime'],
         ]);
     }
 }

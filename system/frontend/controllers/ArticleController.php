@@ -6,6 +6,7 @@ use Yii;
 use backend\models\Article;
 use backend\models\ArticleSearch;
 use backend\models\Seo;
+use backend\models\VisitorLog;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -72,6 +73,8 @@ class ArticleController extends Controller
         $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
         $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
 
+        $visitorInformation = VisitorLog::getVisitorInformation();
+
         return $this->render('articles', [
             'model' => $model,
             'searchModel' => $searchModel,
@@ -88,6 +91,14 @@ class ArticleController extends Controller
             'publisherLogo' => $publisherLogo,
             'keywords' => $keywords,
             'mainEntityOfPage' => $mainEntityOfPage,
+            'ipAddress' => $visitorInformation['ipAddress'],
+            'browser' => $visitorInformation['browser'],
+            'os' => $visitorInformation['os'],
+            'geoLocation' => $visitorInformation['geoLocation'],
+            'language' => $visitorInformation['language'],
+            'referrer' => $visitorInformation['referrer'],
+            'currentUrl' => $visitorInformation['currentUrl'],
+            'visitTime' => $visitorInformation['visitTime'],
         ]);
     }
 
@@ -111,6 +122,8 @@ class ArticleController extends Controller
         $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
         $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
 
+        $visitorInformation = VisitorLog::getVisitorInformation();
+
         return $this->render('article_one', [
             'model' => $model,
             'seoData' => $seoData,
@@ -125,6 +138,14 @@ class ArticleController extends Controller
             'publisherLogo' => $publisherLogo,
             'keywords' => $keywords,
             'mainEntityOfPage' => $mainEntityOfPage,
+            'ipAddress' => $visitorInformation['ipAddress'],
+            'browser' => $visitorInformation['browser'],
+            'os' => $visitorInformation['os'],
+            'geoLocation' => $visitorInformation['geoLocation'],
+            'language' => $visitorInformation['language'],
+            'referrer' => $visitorInformation['referrer'],
+            'currentUrl' => $visitorInformation['currentUrl'],
+            'visitTime' => $visitorInformation['visitTime'],
         ]);
     }
 }

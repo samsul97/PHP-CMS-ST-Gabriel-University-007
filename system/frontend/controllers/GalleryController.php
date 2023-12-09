@@ -6,6 +6,7 @@ use Yii;
 use backend\models\Gallery;
 use backend\models\GalleryCategory;
 use backend\models\Seo;
+use backend\models\VisitorLog;
 use common\components\YoutubeClient;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
@@ -66,6 +67,8 @@ class GalleryController extends Controller
         $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
         $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
 
+        $visitorInformation = VisitorLog::getVisitorInformation();
+
         return $this->render('gallery_categories', [
             'model' => $model,
             'youtubeVideo' => $youtubeVideo,
@@ -81,6 +84,14 @@ class GalleryController extends Controller
             'publisherLogo' => $publisherLogo,
             'keywords' => $keywords,
             'mainEntityOfPage' => $mainEntityOfPage,
+            'ipAddress' => $visitorInformation['ipAddress'],
+            'browser' => $visitorInformation['browser'],
+            'os' => $visitorInformation['os'],
+            'geoLocation' => $visitorInformation['geoLocation'],
+            'language' => $visitorInformation['language'],
+            'referrer' => $visitorInformation['referrer'],
+            'currentUrl' => $visitorInformation['currentUrl'],
+            'visitTime' => $visitorInformation['visitTime'],
         ]);
     }
 
@@ -108,6 +119,8 @@ class GalleryController extends Controller
         $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
         $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
 
+        $visitorInformation = VisitorLog::getVisitorInformation();
+
         return $this->render('gallery', [
             'gallery' => $gallery,
             'galleryCategory' => $galleryCategory,
@@ -123,6 +136,14 @@ class GalleryController extends Controller
             'publisherLogo' => $publisherLogo,
             'keywords' => $keywords,
             'mainEntityOfPage' => $mainEntityOfPage,
+            'ipAddress' => $visitorInformation['ipAddress'],
+            'browser' => $visitorInformation['browser'],
+            'os' => $visitorInformation['os'],
+            'geoLocation' => $visitorInformation['geoLocation'],
+            'language' => $visitorInformation['language'],
+            'referrer' => $visitorInformation['referrer'],
+            'currentUrl' => $visitorInformation['currentUrl'],
+            'visitTime' => $visitorInformation['visitTime'],
         ]);
     }
 
@@ -150,6 +171,8 @@ class GalleryController extends Controller
         $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
         $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
         
+        $visitorInformation = VisitorLog::getVisitorInformation();
+
         return $this->renderAjax('gallery_detail', [
             'gallery' => $gallery,
             'galleryCategory' => $galleryCategory,
@@ -165,6 +188,14 @@ class GalleryController extends Controller
             'publisherLogo' => $publisherLogo,
             'keywords' => $keywords,
             'mainEntityOfPage' => $mainEntityOfPage,
+            'ipAddress' => $visitorInformation['ipAddress'],
+            'browser' => $visitorInformation['browser'],
+            'os' => $visitorInformation['os'],
+            'geoLocation' => $visitorInformation['geoLocation'],
+            'language' => $visitorInformation['language'],
+            'referrer' => $visitorInformation['referrer'],
+            'currentUrl' => $visitorInformation['currentUrl'],
+            'visitTime' => $visitorInformation['visitTime'],
         ]);
     }
 }

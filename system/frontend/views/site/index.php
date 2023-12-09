@@ -29,7 +29,7 @@ $this->registerMetaTag(['name' => 'robots', 'content' => isset($seoData->robots)
 <!-- Youtube video end -->
 
 <?php
-$trackVisitorUrl = Url::to(['site/track-visitor']);
+$trackVisitorUrl = Url::to(['visitor-log/track-visitor']);
 
 $css = <<< CSS
 .embed-responsive-item {
@@ -93,6 +93,7 @@ var language = '$language';
 var referrer = '$referrer';
 var currentUrl = '$currentUrl';
 var visitTime = '$visitTime';
+var geoLocation = '$geoLocation';
 
 $.ajax({
     url: '$trackVisitorUrl',
@@ -101,13 +102,14 @@ $.ajax({
         ip_address: ipAddress,
         browser: browser,
         os: os,
+        geo_location: geoLocation,
         language: language,
         referrer: referrer,
         current_url: currentUrl,
         visit_time: visitTime,
     },
     success: function(response) {
-      console.log(response);
+        console.log(response);
         console.log('Tracking data sent successfully');
     },
     error: function(error) {

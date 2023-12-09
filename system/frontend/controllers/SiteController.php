@@ -97,38 +97,7 @@ class SiteController extends Controller
         $keywords = isset($schemaProperties) && isset($schemaProperties->keywords) ? $schemaProperties->keywords : null;
         $mainEntityOfPage = isset($schemaProperties) && isset($schemaProperties->mainEntityOfPage) ? $schemaProperties->mainEntityOfPage : null;
 
-        $ipAddress = Yii::$app->request->userIP;
-        // $uniqueIdentifier = md5($ipAddress);
-
-        $userAgent = Yii::$app->request->userAgent;
-
-        if (preg_match('/MSIE|Trident/i', $userAgent)) {
-            $browser = 'Internet Explorer';
-        } elseif (preg_match('/Firefox/i', $userAgent)) {
-            $browser = 'Firefox';
-        } elseif (preg_match('/Chrome/i', $userAgent)) {
-            $browser = 'Chrome';
-        } else {
-            $browser = 'Unknown';
-        }
-
-        if (preg_match('/Windows/i', $userAgent)) {
-            $os = 'Windows';
-        } elseif (preg_match('/Mac OS X/i', $userAgent)) {
-            $os = 'Mac OS X';
-        } elseif (preg_match('/Android/i', $userAgent)) {
-            $os = 'Android';
-        } elseif (preg_match('/iPhone/i', $userAgent)) {
-            $os = 'iPhone';
-        } else {
-            $os = 'Unknown';
-        }
-
-        // $geoLocation = Yii::$app->geoip->getLocation($ipAddress);
-        $language = Yii::$app->language;
-        $referrer = Yii::$app->request->referrer;
-        $currentUrl = Url::to('', true);
-        $visitTime = date('Y-m-d H:i:s');
+        $visitorInformation = VisitorLog::getVisitorInformation();
 
         return $this->render('index', [
             'contactUs' => $contactUs,
@@ -144,15 +113,14 @@ class SiteController extends Controller
             'publisherLogo' => $publisherLogo,
             'keywords' => $keywords,
             'mainEntityOfPage' => $mainEntityOfPage,
-            'ipAddress' => $ipAddress,
-            // 'uniqueIdentifier' => $uniqueIdentifier,
-            'browser' => $browser,
-            'os' => $os,
-            // 'geoLocation' => $geoLocation,
-            'language' => $language,
-            'referrer' => $referrer,
-            'currentUrl' => $currentUrl,
-            'visitTime' => $visitTime,
+            'ipAddress' => $visitorInformation['ipAddress'],
+            'browser' => $visitorInformation['browser'],
+            'os' => $visitorInformation['os'],
+            'geoLocation' => $visitorInformation['geoLocation'],
+            'language' => $visitorInformation['language'],
+            'referrer' => $visitorInformation['referrer'],
+            'currentUrl' => $visitorInformation['currentUrl'],
+            'visitTime' => $visitorInformation['visitTime'],
         ]);
     }
 
@@ -397,38 +365,5 @@ class SiteController extends Controller
         return [
             'urlset' => $urls,
         ];
-    }
-
-    public function actionTrackVisitor()
-    {
-        $request = Yii::$app->request;
-
-        // $uniqueIdentifier = $request->post('unique_identifier');
-        $ipAddress = $request->post('ip_address');
-        $browser = $request->post('browser');
-        $os = $request->post('os');
-        // $geoLocation = $request->post('geo_location');
-        $language = $request->post('language');
-        $referrer = $request->post('referrer');
-        $visitUrl = $request->post('current_url');
-        $visitTime = $request->post('visit_time');
-
-        $visitorLog = new VisitorLog([
-            // 'unique_visitor_identifier' => $uniqueIdentifier,
-            'ip_address' => $ipAddress,
-            'browser' => $browser,
-            'os' => $os,
-            // 'geo_location' => $geoLocation,
-            'language' => $language,
-            'referrer' => $referrer,
-            'visit_url' => $visitUrl,
-            'visit_time' => $visitTime,
-        ]);
-        
-        if ($visitorLog->save()) {
-            return 'Tracking data received successfully';
-        } else {
-            return 'Error: ' . json_encode($visitorLog->errors);
-        }
     }
 }

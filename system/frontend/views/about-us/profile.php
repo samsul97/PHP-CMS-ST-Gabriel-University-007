@@ -1,4 +1,7 @@
 <?php
+
+use yii\helpers\Url;
+
 $this->title = isset($seoData->title) ? $seoData->title : 'Profile';
 $this->params['breadcrumbs'][] = ['label' => 'About us', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
@@ -26,6 +29,8 @@ $this->registerMetaTag(['name' => 'robots', 'content' => isset($seoData->robots)
 <!-- Profile section end-->
 
 <?php
+$trackVisitorUrl = Url::to(['visitor-log/track-visitor']);
+
 $js = <<< JS
 function setSchemaProperties() {
     return {
@@ -61,6 +66,38 @@ var scriptTag = document.createElement("script");
 scriptTag.type = "application/ld+json";
 scriptTag.innerHTML = JSON.stringify(schemaProperties);
 document.head.appendChild(scriptTag);
+
+// track visitor
+var ipAddress = '$ipAddress';
+var browser = '$browser';
+var os = '$os';
+var language = '$language';
+var referrer = '$referrer';
+var currentUrl = '$currentUrl';
+var visitTime = '$visitTime';
+var geoLocation = '$geoLocation';
+
+$.ajax({
+    url: '$trackVisitorUrl',
+    type: 'POST',
+    data: {
+        ip_address: ipAddress,
+        browser: browser,
+        os: os,
+        geo_location: geoLocation,
+        language: language,
+        referrer: referrer,
+        current_url: currentUrl,
+        visit_time: visitTime,
+    },
+    success: function(response) {
+        console.log(response);
+        console.log('Tracking data sent successfully');
+    },
+    error: function(error) {
+        console.error('Error sending tracking data:', error);
+    }
+});
 JS;
 
 $this->registerJs($js);
