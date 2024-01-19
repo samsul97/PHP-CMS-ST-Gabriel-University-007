@@ -48,7 +48,7 @@ use yii\widgets\ActiveForm;
 
     <?php else : ?>
             
-            <?= $form->field($model, 'logo')->widget(FileInput::classname(), [
+            <?= $form->field($model, 'banner')->widget(FileInput::classname(), [
             'options' => ['accept' => 'image/*'],
             ]) ?>
 
