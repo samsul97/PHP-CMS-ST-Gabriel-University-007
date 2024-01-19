@@ -37,6 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <label for="exampleInputEmail1">
                                 <div> Resolusi Gambar : </div>
                                 </br> Untuk Banner Gunakan Resolusi 1400px x 800px </br> 
+                                </br> Untuk memastikan gambar ditampilkan dengan benar, harap hindari penggunaan spasi dalam nama file. </br>
+                                Sebagai contoh, gunakan format nama seperti <p style="color:blue">"ATHE_Award_(1).png" atau "athenew.png"</p> 
                             </label>
                         </div>
                     </center>
